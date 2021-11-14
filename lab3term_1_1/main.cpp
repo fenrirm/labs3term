@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <vector>
 
+
 typedef std::vector<int> vi;\
 typedef std::vector<std::vector<int> > matrix;
 
@@ -54,15 +55,8 @@ void sparesify(const matrix& M)
     printVector(IA, (char*)"IA = ");
     printVector(JA, (char*)"JA = ");
 }
+//******************
 
-class Node
-{
-public:
-    int row;
-    int col;
-    int data;
-    Node *next;
-};
 
 void create_Matrix(int **sparseMatrix, int rows, int cols)
 {
@@ -120,6 +114,27 @@ void array_representation(int **sparseMatrix, int rrows, int ccols)
     }
 }
 
+void print_matrix(int **matrixA, int rrows, int ccols)
+{
+    for (int i=0; i<rrows; i++)
+    {
+        for (int j=0; j<ccols; j++)
+        {
+            std::cout<<matrixA[i][j]<<std::endl;
+        }
+    }
+}
+
+//********************
+
+class Node
+{
+public:
+    int row;
+    int col;
+    int data;
+    Node *next;
+};
 
 
 void create_new_node(Node **p, int row_index, int col_index, int x)
@@ -197,6 +212,8 @@ Node *list_representation(int **sparseMatrix, int rows, int cols)
 
 }
 
+//**************************
+
 //ADDITION
 /*Node *add_matrices(Node *matrixA, Node *matrixB)
 {
@@ -239,22 +256,8 @@ Node *list_representation(int **sparseMatrix, int rows, int cols)
 
 }*/
 
-//TRANSPOSE MATRIX
-/*int **transpose_matrix( int **transposeMatrix, int **matrixA, int rows, int cols)
-{
 
-    for(int i=0; i<cols; i++)
-    {
-        for (int j=0; j<rows; j++)
-        {
-            transposeMatrix[i][j]=matrixA[j][i];
-        }
-    }
-    return transposeMatrix;
-
-}*/
-
-void print_matrix(int **matrixA, int rrows, int ccols)
+/*void print_matrix(int **matrixA, int rrows, int ccols)
 {
     for (int i=0; i<rrows; i++)
     {
@@ -263,7 +266,7 @@ void print_matrix(int **matrixA, int rrows, int ccols)
             std::cout<<matrixA[i][j]<<std::endl;
         }
     }
-}
+}*/
 //MULTIPLICATION
 /*void multiplication_of_matrices( int **matrixA, int **matrixB, int rowsA, int colsA, int colsB)
 {
@@ -290,6 +293,30 @@ if ((matrixA[i][t] != 0) && (matrixB[t][j] != 0))
 
 }*/
 
+//***********OPERATIONS WITH MATRIX**************
+
+class sparse_matrix
+{
+    const static int MAX = 100;
+    int **data;
+    int row, col, len;
+public:
+    //constructor
+    sparse_matrix(int r, int c)
+    {
+        row=r;
+        col=c;
+        len=0;
+        data=new int*[MAX];
+
+        for(int i=0; i< MAX; i++)
+        {
+            data[i]=new int[3];
+        }
+    }
+};
+
+//insert element into sparse matrix
 
 
 
@@ -304,119 +331,53 @@ int main() {
     std::cout<<"cols - ";
     std::cin>>cols;
     int **sparseMatrix1 = new int* [rows];
-    for (int i=0; i<rows; i++)
-    {
-        sparseMatrix1[i] = new int [cols];
-    }
-
-    for (int i=0; i<rows; i++)
-    {
-        for(int j=0; j<cols; j++)
-        {
-            std::cin>>sparseMatrix1[i][j];
-        }
-    }
-    int rrows, ccols;
-    std::cout<<"rrows - ";
-    std::cin>>rrows;
-    std::cout<<"ccols - ";
-    std::cin>>ccols;
-    int **sparseMatrix2 = new int* [rrows];
-    for (int i=0; i<rows; i++)
-    {
-        sparseMatrix2[i] = new int [ccols];
-    }
-
-    for (int i=0; i<rrows; i++)
-    {
-        for(int j=0; j<ccols; j++)
-        {
-            std::cin>>sparseMatrix2[i][j];
-        }
-    }
+    //ARRAY REPRESENTATION
+    /* sparseMatrix1 = new int* [rows];
+     create_Matrix(sparseMatrix1, rows, cols);
+     std::cout<<"*******ARRAY REPRESENTATION***********"<<std::endl;
+     array_representation(sparseMatrix1, rows, cols);
+     std::cout<<std::endl;*/
 
 
-
- /*  int **sparseMatrix2;
-   sparseMatrix2 = new int* [rows];
-   Node *matrix1;
-   Node *matrix2;
-   Node *matrix3;*/
-   /*create_Matrix(sparseMatrix1, rows, cols);*/
-   /*array_representation(sparseMatrix1, rows, cols);
-   std::cout<<std::endl;*/
-
-   //TRANSPOSE MATRIX
-   /*int **transposeMatrix;
-   transposeMatrix = new int* [cols];
-   for(int i=0; i<cols; i++)
-   {
-        transposeMatrix[i] = new int [rows];
-   }
-   transposeMatrix=transpose_matrix(transposeMatrix,sparseMatrix1, rows, cols);
-   print_matrix(transposeMatrix, cols, rows);
-   array_representation(transposeMatrix, cols, rows);*/
 
     //LIST REPRESENTATION
- /*  matrix1=list_representation(sparseMatrix1, rows, cols);
-   matrix2=list_representation(sparseMatrix2, rows, cols);
-   print_list(matrix1);
-   std::cout<<std::endl;
-   print_list(matrix2);
-   std::cout<<std::endl;
-   matrix3=add_matrices(matrix1,matrix2);
-   print_list(matrix3);*/
+    //Node *matrix1;
+    //Node *matrix2;
+    //Node *matrix3;
+    //matrix1=list_representation(sparseMatrix1, rows, cols);
+    //matrix2=list_representation(sparseMatrix2, rows, cols);
+    //std::cout<<"**********LIST REPRESENTATION***********"<<std::endl;
+    //print_list(matrix1);
+    //std::cout<<std::endl;
+    //print_list(matrix2);
+    //std::cout<<std::endl;
+    //matrix3=add_matrices(matrix1,matrix2);
+    //print_list(matrix3)
 
 
-
-
-    /*int size = 0;
-    for (int i=0; i<rows; i++)
+    //VECTOR REPRESENTATION
+    matrix M;
+    int ch;
+    for(int i=0; i<rows; i++)
     {
         for(int j=0; j<cols; j++)
         {
-            if (sparseMatrix1[i][j]!=0)
-            {
-                size++;
-            }
+            std::cin>>ch;
         }
     }
-    int compactMatrix[3][size];
-
-    int k=0;
-    for (int i=0; i<rows; i++)
-    {
-        for (int j=0; j<cols; j++)
-        {
-            if (sparseMatrix1[i][j]!=0)
-            {
-                compactMatrix[0][k]=i;
-                compactMatrix[1][k]=j;
-                compactMatrix[2][k]=sparseMatrix1[i][j];
-                k++;
-            }
-        }
-    }
-    for(int i=0; i<3; i++)
-    {
-        for(int j=0; j<size; j++)
-            std::cout<<" "<<compactMatrix[i][j];
-
-        std::cout<<"\n";
-    }
-*/
-
-
-    for (int i=0; i<rows; i++)
-    {
-        delete  [] sparseMatrix1[i];
-    }
-    delete[] sparseMatrix1;
+    std::cout<<"***********VECTOR REPRESENTATION************"<<std::endl;
+    sparesify(M);
 
 
 
 
-
+    //MEMORY FREE
+    /*  for (int i=0; i<rows; i++)
+      {
+          delete  [] sparseMatrix1[i];
+      }
+      delete[] sparseMatrix1;
+  */
 
     return 0;
 }
