@@ -343,13 +343,13 @@ int main() {
 
 
     //LIST REPRESENTATION
-    //Node *matrix1;
+    Node *matrix1;
     //Node *matrix2;
     //Node *matrix3;
-    //matrix1=list_representation(sparseMatrix1, rows, cols);
+    matrix1=list_representation(sparseMatrix1, rows, cols);
     //matrix2=list_representation(sparseMatrix2, rows, cols);
-    //std::cout<<"**********LIST REPRESENTATION***********"<<std::endl;
-    //print_list(matrix1);
+    std::cout<<"**********LIST REPRESENTATION***********"<<std::endl;
+    print_list(matrix1);
     //std::cout<<std::endl;
     //print_list(matrix2);
     //std::cout<<std::endl;
