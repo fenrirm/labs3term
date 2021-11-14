@@ -295,7 +295,6 @@ if ((matrixA[i][t] != 0) && (matrixB[t][j] != 0))
 
 //***********OPERATIONS WITH MATRIX**************
 
-/*
 class sparse_matrix
 {
     const static int MAX = 100;
@@ -316,7 +315,6 @@ public:
         }
     }
 };
-*/
 
 //insert element into sparse matrix
 
