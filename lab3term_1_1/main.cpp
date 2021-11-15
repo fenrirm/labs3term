@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <math.h>
 
 
 typedef std::vector<int> vi;\
@@ -295,7 +296,6 @@ if ((matrixA[i][t] != 0) && (matrixB[t][j] != 0))
 
 //***********OPERATIONS WITH MATRIX**************
 
-/*
 class sparse_matrix
 {
     const static int MAX = 100;
@@ -315,11 +315,335 @@ public:
             data[i]=new int[3];
         }
     }
+    //insertion elements into sparse matrix
+    void insert(int r, int c, int val)
+    {
+        //invalid entry
+        if(r>row||c>col)
+        {
+            std::cout<<"Invalid entry";
+        }
+        else
+        {
+            data[len][0]=r;//row value
+            data[len][1]=c;//column value
+            data[len][2]=val;//element's value
+            len++;
+        }
+    }
+    void add(sparse_matrix b)
+    {
+        //if matrices don't have same dimensions
+        if(row!=b.row||col!=b.col)
+        {
+            std::cout<<"matrices can't be added";
+        }
+        else
+        {
+            int apos=0, bpos=0;
+            sparse_matrix result(row, col);
+
+            while(apos<len && bpos<b.len)
+            {
+
+                // if b's row and col is smaller
+                if (data[apos][0] > b.data[bpos][0] ||
+                    (data[apos][0] == b.data[bpos][0] &&
+                     data[apos][1] > b.data[bpos][1]))
+
+                {
+
+                    // insert smaller value into result
+                    result.insert(b.data[bpos][0],
+                                  b.data[bpos][1],
+                                  b.data[bpos][2]);
+
+                    bpos++;
+                }
+
+                    // if a's row and col is smaller
+                else if (data[apos][0] < b.data[bpos][0] ||
+                         (data[apos][0] == b.data[bpos][0] &&
+                          data[apos][1] < b.data[bpos][1]))
+
+                {
+
+                    // insert smaller value into result
+                    result.insert(data[apos][0],
+                                  data[apos][1],
+                                  data[apos][2]);
+
+                    apos++;
+                }
+
+                else
+                {
+
+                    // add the values as row and col is same
+                    int addedval = data[apos][2] +
+                                   b.data[bpos][2];
+
+                    if (addedval != 0)
+                        result.insert(data[apos][0],
+                                      data[apos][1],
+                                      addedval);
+                    // then insert
+                    apos++;
+                    bpos++;
+                }
+            }
+
+            // insert remaining elements
+            while (apos < len)
+                result.insert(data[apos][0],
+                              data[apos][1],
+                              data[apos++][2]);
+
+            while (bpos < b.len)
+                result.insert(b.data[bpos][0],
+                              b.data[bpos][1],
+                              b.data[bpos++][2]);
+
+            // print result
+            result.print();
+        }
+    }
+
+    sparse_matrix transpose()
+    {
+
+        // new matrix with inversed row X col
+        sparse_matrix result(col, row);
+
+        // same number of elements
+        result.len = len;
+
+        // to count number of elements in each column
+        int *count = new int[col + 1];
+
+        // initialize all to 0
+        for (int i = 1; i <= col; i++)
+            count[i] = 0;
+
+        for (int i = 0; i < len; i++)
+            count[data[i][1]]++;
+
+        int *index = new int[col + 1];
+
+        // to count number of elements having
+        // col smaller than particular i
+
+        // as there is no col with value < 0
+        index[0] = 0;
+
+        // initialize rest of the indices
+        for (int i = 1; i <= col; i++)
+
+            index[i] = index[i - 1] + count[i - 1];
+
+        for (int i = 0; i < len; i++)
+        {
+
+            // insert a data at rpos and
+            // increment its value
+            int rpos = index[data[i][1]]++;
+
+            // transpose row=col
+            result.data[rpos][0] = data[i][1];
+
+            // transpose col=row
+            result.data[rpos][1] = data[i][0];
+
+            // same value
+            result.data[rpos][2] = data[i][2];
+        }
+
+        // the above method ensures
+        // sorting of transpose matrix
+        // according to row-col value
+        return result;
+    }
+
+    void multiply(sparse_matrix b)
+    {
+        if (col != b.row)
+        {
+
+            // Invalid multiplication
+            std::cout << "Can't multiply, Invalid dimensions";
+            return;
+        }
+
+        // transpose b to compare row
+        // and col values and to add them at the end
+        b = b.transpose();
+        int apos, bpos;
+
+        // result matrix of dimension row X b.col
+        // however b has been transposed,
+        // hence row X b.row
+        sparse_matrix result(row, b.row);
+
+        // iterate over all elements of A
+        for (apos = 0; apos < len;)
+        {
+
+            // current row of result matrix
+            int r = data[apos][0];
+
+            // iterate over all elements of B
+            for (bpos = 0; bpos < b.len;)
+            {
+
+                // current column of result matrix
+                // data[,0] used as b is transposed
+                int c = b.data[bpos][0];
+
+                // temporary pointers created to add all
+                // multiplied values to obtain current
+                // element of result matrix
+                int tempa = apos;
+                int tempb = bpos;
+
+                int sum = 0;
+
+                // iterate over all elements with
+                // same row and col value
+                // to calculate result[r]
+                while (tempa < len && data[tempa][0] == r &&
+                       tempb < b.len && b.data[tempb][0] == c)
+                {
+                    if (data[tempa][1] < b.data[tempb][1])
+
+                        // skip a
+                        tempa++;
+
+                    else if (data[tempa][1] > b.data[tempb][1])
+
+                        // skip b
+                        tempb++;
+                    else
+
+                        // same col, so multiply and increment
+                        sum += data[tempa++][2] *
+                               b.data[tempb++][2];
+                }
+
+                // insert sum obtained in result[r]
+                // if its not equal to 0
+                if (sum != 0)
+                    result.insert(r, c, sum);
+
+                while (bpos < b.len &&
+                       b.data[bpos][0] == c)
+
+                    // jump to next column
+                    bpos++;
+            }
+            while (apos < len && data[apos][0] == r)
+
+                // jump to next row
+                apos++;
+        }
+        result.print();
+    }
+
+    // printing matrix
+    void print()
+    {
+        std::cout << "\nDimension: " << row << "x" << col;
+        std::cout << "\nSparse Matrix: \nRow\tColumn\tValue\n";
+
+        for (int i = 0; i < len; i++)
+        {
+            std::cout << data[i][0] << "\t " << data[i][1]
+                 << "\t " << data[i][2] << std::endl;
+        }
+    }
 };
-*/
 
-//insert element into sparse matrix
 
+
+//***********************************************
+class triangular
+{
+private:
+    double x1, y1, x2, y2, x3, y3;
+public:
+    triangular(double a1, double b1, double a2, double b2, double a3, double b3)
+    {
+        x1=a1;
+        y1=b1;
+        x2=a2;
+        y2=b2;
+        x3=a3;
+        y3=b3;
+    }
+
+    double len(double x, double y, double a, double b)
+    {
+        double length = sqrt(pow((a-x),2)+pow((b-y),2));
+        return length;
+    }
+
+    double S()
+    {
+        double a = len(x1, y1, x2, y2);
+        double b = len(x2, y2, x3, y3);
+        double c = len(x3, y3, x1, y1);
+        double p = (a+b+c)/2;
+        double S = sqrt(p*(p-a)*(p-b)*(p-c));
+        return S;
+    }
+    double P()
+    {
+        double a = len(x1, y1, x2, y2);
+        double b = len(x2, y2, x3, y3);
+        double c = len(x3, y3, x1, y1);
+        double P = a+b+c;
+        return P;
+    }
+    void print()
+    {
+        double func1, func2;
+        func1=S();
+        func2=P();
+        std::cout<<func1<<std::endl;
+        std::cout<<func2;
+    }
+
+    bool isRiv()
+    {
+        double a = len(x1, y1, x2, y2);
+        double b = len(x2, y2, x3, y3);
+        double c = len(x3, y3, x1, y1);
+        if((a==b)||(a==c)||(b==c))
+        {
+            return true;
+        }
+        else
+            return false;
+
+    }
+    bool isRiv2()
+    {
+        double a = len(x1, y1, x2, y2);
+        double b = len(x2, y2, x3, y3);
+        double c = len(x3, y3, x1, y1);
+        if(a==b==c)
+        {
+            return true;
+        }
+        else
+            return false;
+
+    }
+    double vec(double a1, double b1, double a2, double b2)
+    {
+        double a = a2-a1;
+        double b = b2-b1;
+    }
+};
 
 
 
@@ -343,13 +667,13 @@ int main() {
 
 
     //LIST REPRESENTATION
-    Node *matrix1;
+    //Node *matrix1;
     //Node *matrix2;
     //Node *matrix3;
-    matrix1=list_representation(sparseMatrix1, rows, cols);
+    //matrix1=list_representation(sparseMatrix1, rows, cols);
     //matrix2=list_representation(sparseMatrix2, rows, cols);
-    std::cout<<"**********LIST REPRESENTATION***********"<<std::endl;
-    print_list(matrix1);
+    //std::cout<<"**********LIST REPRESENTATION***********"<<std::endl;
+    //print_list(matrix1);
     //std::cout<<std::endl;
     //print_list(matrix2);
     //std::cout<<std::endl;
@@ -358,17 +682,22 @@ int main() {
 
 
     //VECTOR REPRESENTATION
-    matrix M;
+    /*matrix M;
     int ch;
     for(int i=0; i<rows; i++)
     {
+        M.push_back({});
         for(int j=0; j<cols; j++)
         {
             std::cin>>ch;
+            M[i].push_back(ch);
         }
     }
     std::cout<<"***********VECTOR REPRESENTATION************"<<std::endl;
-    sparesify(M);
+    sparesify(M);*/
+
+    triangular a(5,6, 7, 8, 11, 15);
+    a.print();
 
 
 
