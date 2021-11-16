@@ -603,14 +603,7 @@ public:
         double P = a+b+c;
         return P;
     }
-    void print()
-    {
-        double func1, func2;
-        func1=S();
-        func2=P();
-        std::cout<<func1<<std::endl;
-        std::cout<<func2;
-    }
+
 
     bool isRiv()
     {
@@ -638,11 +631,36 @@ public:
             return false;
 
     }
-    double vec(double a1, double b1, double a2, double b2)
+
+    bool isPr()
     {
-        double a = a2-a1;
-        double b = b2-b1;
+        if ((((x2-x1)*(x3-x2)+(y2-y1)*(y3-y2))==0)||(((x3-x2)*(x1-x3)+(y3-y2)*(y1-y3))==0)||(((x3-x1)*(x2-x1)+(y3-y1)*(y2-y1))==0))
+        {
+            return true;
+        }
+        else
+            return false;
     }
+
+    void print()
+    {
+        double func1, func2;
+        func1=S();
+        func2=P();
+        std::cout<<func1<<std::endl;
+        std::cout<<func2<<std::endl;
+        if(isPr())
+        {
+            std::cout<<"Pryam";
+        }
+        else
+        {
+            std::cout<<"NePryam";
+        }
+    }
+
+
+
 };
 
 
@@ -650,13 +668,13 @@ public:
 
 int main() {
 
-    int rows;
+    /*int rows;
     int cols;
     std::cout<<"rows - ";
     std::cin>>rows;
     std::cout<<"cols - ";
     std::cin>>cols;
-    int **sparseMatrix1 = new int* [rows];
+    int **sparseMatrix1 = new int* [rows];*/
     //ARRAY REPRESENTATION
     /* sparseMatrix1 = new int* [rows];
      create_Matrix(sparseMatrix1, rows, cols);
@@ -696,7 +714,7 @@ int main() {
     std::cout<<"***********VECTOR REPRESENTATION************"<<std::endl;
     sparesify(M);*/
 
-    triangular a(5,6, 7, 8, 11, 15);
+    triangular a(1,2, -1, 5, 7, 6);
     a.print();
 
 
