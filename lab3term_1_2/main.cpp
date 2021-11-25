@@ -108,6 +108,37 @@ public:
 };
 
 
+class quadrangle
+{
+private:
+    double x1, y1, x2, y2, x3, y3, x4, y4;
+public:
+    quadrangle(double a1, double b1, double a2, double b2, double a3, double b3, double a4, double b4)
+    {
+        x1 = a1;
+        y1 = b1;
+        x2 = a2;
+        y2 = b2;
+        x3 = a3;
+        y3 = b3;
+        x4 = a4;
+        y4 = b4;
+    }
+
+    void P() const
+    {
+        double a = len(x1, y1, x2, y2);
+        double b = len(x2, y2, x3, y3);
+        double c = len(x3, y3, x4, y4);
+        double d = len(x4, y4, x1, y1);
+    }
+
+    void S() const
+    {
+
+    }
+};
+
 int main() {
     triangular(-2, 4, 6, 7, -1, 3);
 
