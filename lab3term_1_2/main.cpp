@@ -1,10 +1,44 @@
 #include <iostream>
 #include <cmath>
+#define N 50
 
 static double len(double x, double y, double a, double b)
 {
     double length = sqrt(pow((a-x),2)+pow((b-y),2));
     return length;
+}
+
+void main_elem( int k, double mas[] [N + 1], int n, int otv[] )
+{
+    int i, j, i_max = k, j_max = k;
+    double temp;
+    //Ищем максимальный по модулю элемент
+    for ( i = k; i < n; i++ )
+        for ( j = k; j < n; j++ )
+            if ( fabs( mas[i_max] [j_max] ) < fabs( mas[i] [j] ) )
+            {
+                i_max = i;
+                j_max = j;
+            }
+    //Переставляем строки
+    for ( j = k; j < n + 1; j++ )
+    {
+        temp = mas[k] [j];
+        mas[k] [j] = mas[i_max] [j];
+        mas[i_max] [j] = temp;
+    }
+    //Переставляем столбцы
+    for ( i = 0; i < n; i++ )
+    {
+        temp = mas[i] [k];
+        mas[i] [k] = mas[i] [j_max];
+        mas[i] [j_max] = temp;
+    }
+    //Учитываем изменение порядка корней
+    i = otv[k];
+    otv[k] = otv[j_max];
+    otv[j_max] = i;
+
 }
 
 class triangular
