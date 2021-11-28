@@ -8,6 +8,29 @@ void displayPoint(std::point P)
     std::cout<<"("<<P.first<<","<<P.second<<")"<<std::endl;
 }
 
+bool areLinesParallel(std::point A, std::point B, std::point C, std::point D)
+{
+    //line BC represented as a1x + b1y = c1
+    double a1 = C.second - B.second;
+    double b1 = B.first - C.first;
+    //double c1 = a1 * (B.first) + b1 * (B.second);
+
+    //line AD represented as a2x + b2y = c2
+    double a2 = D.second - A.second;
+    double b2 = A.first - D.first;
+    //double c2 = a2 * (A.first) + b2 * (A.second);
+
+    double determinant = a1 * b2 - a2 * b1;
+
+    if (determinant == 0)
+    {
+        //the lines are parallel
+        return true;
+    }
+    else
+        return false;
+}
+
 std::point lineIntersection(std::point A, std::point B, std::point C, std::point D)
 {
     //line AC represented as a1x + b1y = c1
@@ -42,105 +65,6 @@ static double len(double x, double y, double a, double b)
     return length;
 }
 
-/*void main_elem( int k, double mas[] [N + 1], int n, int otv[] )
-{
-    int i, j, i_max = k, j_max = k;
-    double temp;
-    //Ищем максимальный по модулю элемент
-    for ( i = k; i < n; i++ )
-        for ( j = k; j < n; j++ )
-            if ( fabs( mas[i_max] [j_max] ) < fabs( mas[i] [j] ) )
-            {
-                i_max = i;
-                j_max = j;
-            }
-    //Переставляем строки
-    for ( j = k; j < n + 1; j++ )
-    {
-        temp = mas[k] [j];
-        mas[k] [j] = mas[i_max] [j];
-        mas[i_max] [j] = temp;
-    }
-    //Переставляем столбцы
-    for ( i = 0; i < n; i++ )
-    {
-        temp = mas[i] [k];
-        mas[i] [k] = mas[i] [j_max];
-        mas[i] [j_max] = temp;
-    }
-    //Учитываем изменение порядка корней
-    i = otv[k];
-    otv[k] = otv[j_max];
-    otv[j_max] = i;
-}*/
-
-/*
-void resh()
-{
-    double mas[N][N + 1];
-    double x[N]; //Корни системы
-    int otv[N]; //Отвечает за порядок корней
-    int i, j, k, n;
-    //Ввод данных
-    system("cls");
-    do
-    {
-        std::cout<<"Enter the number of systems: ";
-        std::cin>>n;
-        if ( N < n )
-            std::cout<<"Too big number. Repeat enter\n";
-    }
-    while ( N < n );
-    std::cout<<"Enter a system:\n";
-    for ( i = 0; i < n; i++ )
-        for ( j = 0; j < n+1; j++ )
-            std::cin>>mas[i][j];
-    //Вывод введенной системы
-    system("cls");
-    std::cout<<( "System:\n" );
-    for ( i = 0; i < n; i++ )
-    {
-        for ( j = 0; j < n+1; j++ )
-            std::cout<<mas[i][j];
-        std::cout<<( "\n" );
-    }
-    //Сначала все корни по порядку
-    for ( i = 0; i < n+1; i++ )
-        otv[i] = i;
-    //Прямой ход метода Гаусса
-    for ( k = 0; k < n; k++ )
-    { //На какой позиции должен стоять главный элемент
-        main_elem( k, mas, n, otv ); //Установка главного элемента
-        if ( fabs( mas[k] [k] ) < 0.0001 )
-        {
-            std::cout<<"System doesn't have one solution";
-            //return ( 0 );
-        }
-        for ( j = n; j >= k; j-- )
-            mas[k] [j] /= mas[k] [k];
-        for ( i = k + 1; i < n; i++ )
-            for ( j = n; j >= k; j-- )
-                mas[i] [j] -= mas[k] [j] * mas[i] [k];
-    }
-    //Обратный ход
-    for ( i = 0; i < n; i++ )
-        x[i] = mas[i] [n];
-    for ( i = n - 2; i >= 0; i-- )
-        for ( j = i + 1; j < n; j++ )
-            x[i] -= x[j] * mas[i] [j];
-    //Вывод результата
-    std::cout<<( "Answer:\n" );
-    for ( i = 0; i < n; i++ )
-        for ( j = 0; j < n; j++ )
-            if ( i == otv[j] )
-            { //Расставляем корни по порядку
-                std::cout<<x[j]<<std::endl;
-                break;
-            }
-}
-*/
-
-
 
 class triangular
 
@@ -163,26 +87,26 @@ public:
         C.second=b3;
     }
 
-     void area() const
+    double area() const
     {
         double AB = len(A.first, A.second, B.first, B.second);
         double BC = len(B.first, B.second, C.first, C.second);
         double AC = len(C.first, C.second, A.first, A.second);
         double p = (AB+BC+AC)/2;
         double S = sqrt(p * (p - AB) * (p - BC) * (p - AC));
-        std::cout<<"S = "<<S;
+        return S;
     }
 
-    void perimeter() const
+    double perimeter() const
     {
         double AB = len(A.first, A.second, B.first, B.second);
         double BC = len(B.first, B.second, C.first, C.second);
         double AC = len(C.first, C.second, A.first, A.second);
         double P = AB+BC+AC;
-        std::cout<<"P = "<<P;
+        return P;
     }
 
-    void isRightTriangle() const
+    bool isRight() const
     {
         if ((((B.first - A.first) * (C.first - B.first)
         + (B.second - A.second) * (C.second - B.second)) == 0)||
@@ -191,56 +115,109 @@ public:
         || (((C.first - A.first) * (B.first - A.first)
         + (C.second - A.second) * (B.second - A.second)) == 0))
         {
-            std::cout<<"isRightTriangle";
+            return true;
         }
         else
-            std::cout<<"isNotRightTriangle";
+            return false;
     }
 
-    void isIsosceles() const
+    bool isIsosceles() const
     {
         double AB = len(A.first, A.second, B.first, B.second);
         double BC = len(B.first, B.second, C.first, C.second);
         double AC = len(C.first, C.second, A.first, A.second);
         if((AB == BC) || (BC == AC) || (AB == AC))
         {
-            std::cout<<"isIsosceles";
+            return true;
         }
         else
-            std::cout<<"isNotIsosceles";
+            return false;
 
     }
 
-    void isEquilateral() const
+    bool isEquilateral() const
     {
         double AB = len(A.first, A.second, B.first, B.second);
         double BC = len(B.first, B.second, C.first, C.second);
         double AC = len(C.first, C.second, A.first, A.second);
         if(AB == BC == AC)
         {
-            std::cout<<"isEquilateral";
+            return true;
         }
         else
-            std::cout<<"isNotEquilateral";
+            return false;
 
     }
 
-    void median() const
+    std::point median() const
     {
         double a0 = (A.first + B.first + C.first) / 3;
         double b0 = (A.second + B.second + C.second) / 3;
-        std::cout<<"median - "<<"x = "<<a0<<"y = "<<b0;
+        std::point M = std::make_pair(a0, b0);
+        return M;
     }
 
-    void bisector() const
+    std::point bisector() const
     {
         double AB = len(A.first, A.second, B.first, B.second);
         double BC = len(B.first, B.second, C.first, C.second);
         double AC = len(C.first, C.second, A.first, A.second);
         double a0 = (AB * A.first + BC * B.first + AC * C.first) / ( AB + BC + AC);
         double b0 = (AB * A.second + BC * B.second + AC * C.second) / (AB + BC + AC);
-        std::cout<<"bisector - "<<"x = "<<a0<<"y = "<<b0;
+        std::point L = std::make_pair(a0, b0);
+        return L;
     }
+
+    std::point centerOfCircle() const
+    {
+        double x12 = A.first - B.first;
+        double x23 = B.first - C.first;
+        double x31 = C.first - A.first;
+        double y12 = A.second - B.second;
+        double y23 = B.second - C.second;
+        double y31 = C.second - A.second;
+        double z1 = pow(A.first, 2) + pow(A.second, 2);
+        double z2 = pow(B.first, 2) + pow(B.second, 2);
+        double z3 = pow(C.first, 2) + pow(C.second, 2);
+        double zx = y12 * z3 + y23 * z1 + y31 * z2;
+        double zy = x12 * z3 + x23 * z1 + x31 * z2;
+        double z = x12 * y31 - y12 * x31;
+        double a0 = -zx / 2 * z;
+        double b0 = zy / 2 * z;
+        std::point O = std::make_pair(a0, b0);
+        return O;
+    }
+
+
+    void checkTriangular() const
+    {
+        if(isIsosceles())
+        {
+            std::cout<<"This triangular is isosceles ";
+        }
+        else if(isEquilateral())
+        {
+            std::cout<<"This triangular is equilateral ";
+        }
+        else if(isRight())
+        {
+            std::cout<<"This triangular is right ";
+        }
+        else
+        {
+            std::cout<<"This is a simple triangular";
+        }
+        std::cout<<"perimeter = "<<perimeter()<<"\n"
+        <<"area = "<<area()<<"\n";
+        std::cout<<"The coordinate of the point of intersection of medians - ";
+        displayPoint(median());
+        std::cout<<"\nThe coordinate of the point of intersection of bisectors - ";
+        displayPoint(bisector());
+        std::cout<<"\nThe coordinate of the point of the center of the circle - ";
+        displayPoint(centerOfCircle());
+    }
+
+
 
 };
 //*************************************************************************************
@@ -267,10 +244,6 @@ public:
 
     double perimeter() const
     {
-        /*double a = len(x1, y1, x2, y2);
-        double b = len(x2, y2, x3, y3);
-        double c = len(x3, y3, x4, y4);
-        double d = len(x4, y4, x1, y1);*/
         double AB = (A.first, A.second, B.first, B.second);
         double BC = (B.first, B.second, C.first, C.second);
         double CD = (C.first, C.second, D.first, D.second);
@@ -278,6 +251,8 @@ public:
         double perimeter = AB + BC + CD + DA;
         return perimeter;
     }
+
+    std::point M = lineIntersection(A, B, C, D);
 
     double area() const
     {
@@ -292,40 +267,192 @@ public:
         double area = 0.5 * AC * BD * sinY;
         return area;
     }
+
+    double areaTrapeze() const
+    {
+        double BC = len(B.first, B.second, C.first, C.second);
+        double AD = len(A.first, A.second, D.first, D.second);
+        double AB = len(A.first, A.second, B.first, B.second);
+        double CD = len(C.first, C.second, D.first, D.second);
+        double MN = (BC + AD)/2;
+        double AF = AD - BC;
+        double BF = CD;
+        double p = (AB + BF + AF) / 2;
+        double BH = (2 * sqrt(p * (p - AB) * (p - BF) * (p - AF))) / AF;
+        double area  = MN * BH;
+        return area;
+    }
+
+    double areaForRectangular() const
+    {
+        double BC = len(B.first, B.second, C.first, C.second);
+        double AB = len(A.first, A.second, B.first, B.second);
+        double area = AB * BC;
+        return area;
+    }
+
+    double areaForRhombus() const
+    {
+        double AC = len(A.first, A.second, C.first, C.second);
+        double BD = len(B.first, B.second, D.first, D.second);
+        double area = 0.5 * AC * BD;
+        return area;
+    }
+
+    double areaForSquare() const
+    {
+        double AB = (A.first, A.second, B.first, B.second);
+        double area = pow(AB, 2);
+        return area;
+    }
+
+    bool isParallelogram() const
+    {
+        double BC = len(B.first, B.second, C.first, C.second);
+        double AD = len(A.first, A.second, D.first, D.second);
+        double AB = len(A.first, A.second, B.first, B.second);
+        double CD = len(C.first, C.second, D.first, D.second);
+        if((AB == CD) && (BC == AD))
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    bool isRhombus() const
+    {
+        double BC = len(B.first, B.second, C.first, C.second);
+        double AB = len(A.first, A.second, B.first, B.second);
+        if (isParallelogram() && AB == BC)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    bool isRectangular() const
+    {
+        double AC = len(A.first, A.second, C.first, C.second);
+        double BD = len(B.first, B.second, D.first, D.second);
+        if(isParallelogram() && AC == BD)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    bool isSquare() const
+    {
+        double BC = len(B.first, B.second, C.first, C.second);
+        double AB = len(A.first, A.second, B.first, B.second);
+        if(isRectangular() && AB == BC)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    bool isTrapeze() const
+    {
+        if(areLinesParallel(A, B, C, D)
+        && !areLinesParallel(D, A, B, C))
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    bool isEqualTrapeze() const
+    {
+        double AB = len(A.first, A.second, B.first, B.second);
+        double CD = len(C.first, C.second, D.first, D.second);
+        if(isTrapeze() && AB==CD)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+
+
+
+    //*********
+
+    void checkFigure() const
+    {
+        if(isParallelogram())
+        {
+            std::cout<<"This quadrangle is a parallelogram ";
+            std::cout<<"\nperimeter = "<<perimeter();
+            std::cout<<"\narea = "<<area();
+            std::cout<<"coordinate of intersection of diagonals - ";
+            displayPoint(M);
+        }
+        else if(isRhombus())
+        {
+            std::cout<<"This quadrangle is a rhombus ";
+            std::cout<<"\nperimeter = "<<perimeter();
+            std::cout<<"\narea = "<<areaForRhombus();
+            std::cout<<"coordinate of intersection of diagonals - ";
+            displayPoint(M);
+        }
+        else if(isRectangular())
+        {
+            std::cout<<"This quadrangle is a rectangular ";
+            std::cout<<"\nperimeter = "<<perimeter();
+            std::cout<<"\narea = "<<areaForRectangular();
+            std::cout<<"coordinate of intersection of diagonals and the center of circumcircle  - ";
+            displayPoint(M);
+        }
+        else if(isSquare())
+        {
+            std::cout<<"This quadrangle is a square ";
+            std::cout<<"\nperimeter = "<<perimeter();
+            std::cout<<"\narea = "<<areaForSquare();
+            std::cout<<"coordinate of intersection of diagonals and the center of circumcircle - ";
+            displayPoint(M);
+        }
+        else if(isTrapeze())
+        {
+            if(isEqualTrapeze())
+            {
+                std::cout<<"This quadrangle is an equal trapeze ";
+            }
+            else
+                std::cout<<"This quadrangle is a trapeze ";
+
+            std::cout<<"\nperimeter = "<<perimeter();
+            std::cout<<"\narea = "<<areaTrapeze();
+            std::cout<<"coordinate of intersection of diagonals - ";
+            displayPoint(M);
+        }
+        else
+            {
+            std::cout << "This is a simple quadrangle";
+            std::cout << "\nperimeter = " << perimeter();
+            std::cout << "\narea = " << area();
+            std::cout<<"coordinate of intersection of diagonals - ";
+            displayPoint(M);
+        }
+    }
 };
 
+
+//**********************************************************************
+
+
 int main() {
-    //triangular(-2, 4, 6, 7, -1, 3);
     quadrangle a(3, 4, 1, 5, 7, 8, 9, 6);
-    std::cout<<"perimeter - "<<a.perimeter()<<"\narea - "<<a.area();
+    a.checkFigure();
 
-
-
-
-
-
-    //******************************************
-
-    /*std::point A;
-    std::cin>>A.first>>A.second;
-    std::point B;
-    std::cin>>B.first>>B.second;
-    std::point C;
-    std::cin>>C.first>>C.second;
-    std::point D;
-    std::cin>>D.first>>D.second;*/
-
-    //std::point intersection = lineIntersection(A, B, C, D);
-    /*if (intersection.first == FLT_MAX && intersection.second == FLT_MAX)
-    {
-        std::cout << "The given lines AB and CD are parallel";
-    }
-    else
-    {
-        std::cout << "The intersection of given lines AC and BD is: ";
-        displayPoint(intersection);
-    }*/
-
+    //triangular b(1, 4, -6, 3, 7, 9);
+    //b.checkTriangular();
 
 
 
