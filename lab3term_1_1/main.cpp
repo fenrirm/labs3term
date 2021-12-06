@@ -78,6 +78,7 @@ void create_Matrix(int **sparseMatrix, int rows, int cols)
 
 }
 
+
 void array_representation(int **sparseMatrix, int rrows, int ccols)
 {
     int size =0;
@@ -196,6 +197,8 @@ void print_list(Node *start)
     }
 }
 
+
+
 Node *list_representation(int **sparseMatrix, int rows, int cols)
 {
     create_Matrix(sparseMatrix, rows, cols);
@@ -214,86 +217,7 @@ Node *list_representation(int **sparseMatrix, int rows, int cols)
 
 }
 
-//**************************
 
-//ADDITION
-/*Node *add_matrices(Node *matrixA, Node *matrixB)
-{
-    Node *matrixC= nullptr;
-    while(matrixA!= nullptr && matrixB!= nullptr)
-    {
-        if(matrixA->row==matrixB->row)
-        {
-            if(matrixA->col==matrixB->col)
-            {
-                create_new_node(&matrixC, matrixA->row, matrixA->col, matrixA->data+matrixB->data);
-                matrixA = matrixA->next;
-                matrixB = matrixB->next;
-            }
-            else {
-                if (matrixA->col < matrixB->col)
-                {
-                    create_new_node(&matrixC, matrixA->row, matrixA->col, matrixA->data);
-                    matrixA = matrixA->next;
-                } else
-                {
-                    create_new_node(&matrixC, matrixB->row, matrixB->col, matrixB->data);
-                    matrixB = matrixB->next;
-                }
-            }
-
-        } else{
-            if (matrixA->row < matrixB->row)
-            {
-                create_new_node(&matrixC, matrixA->row, matrixA->col, matrixA->data);
-                matrixA = matrixA->next;
-            } else
-            {
-                create_new_node(&matrixC, matrixB->row, matrixB->col, matrixB->data);
-                matrixB = matrixB->next;
-            }
-        }
-    }
-    return matrixC;
-
-}*/
-
-
-/*void print_matrix(int **matrixA, int rrows, int ccols)
-{
-    for (int i=0; i<rrows; i++)
-    {
-        for (int j=0; j<ccols; j++)
-        {
-            std::cout<<matrixA[i][j]<<std::endl;
-        }
-    }
-}*/
-//MULTIPLICATION
-/*void multiplication_of_matrices( int **matrixA, int **matrixB, int rowsA, int colsA, int colsB)
-{
-    std::cout<<"I'm in";
-    int **matrixC;
-    matrixC = new int *[rowsA];
-    for (int i = 0; i < rowsA; i++) {
-        matrixC[i] = new int[colsB];
-    }
-
-    for (int i = 0; i < rowsA; i++) {
-        for (int j = 0; j < colsB; j++) {
-            matrixC[i][j] = 0;
-            for (int t = 0; t < colsA; t++) {
-if ((matrixA[i][t] != 0) && (matrixB[t][j] != 0))
-
-                    matrixC[i][j] += matrixA[i][t] * matrixB[t][j];
-
-
-            }
-        }
-    }
-    print_matrix(matrixC, rowsA, colsB);
-
-}*/
 
 //***********OPERATIONS WITH MATRIX**************
 

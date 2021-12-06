@@ -2,6 +2,7 @@
 #include <cmath>
 #include <bits/stdc++.h>
 #define point pair<double, double>
+#include <vector>
 
 void displayPoint(std::point P)
 {
@@ -59,19 +60,16 @@ std::point lineIntersection(std::point A, std::point B, std::point C, std::point
 
 }
 
-static double len(double x, double y, double a, double b)
+static double len( std::point K, std::point H)
 {
-    double length = sqrt(pow((a-x),2)+pow((b-y),2));
+    double length = sqrt(pow((H.first-K.first),2)+pow((H.second-K.second),2));
     return length;
 }
 
 
 class triangular
-
 {
-
 private:
-   /* double x1, y1, x2, y2, x3, y3;*/
    std::point A;
    std::point B;
    std::point C;
@@ -89,9 +87,9 @@ public:
 
     double area() const
     {
-        double AB = len(A.first, A.second, B.first, B.second);
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AC = len(C.first, C.second, A.first, A.second);
+        double AB = len(A, B);
+        double BC = len(B, C);
+        double AC = len(C, A);
         double p = (AB+BC+AC)/2;
         double S = sqrt(p * (p - AB) * (p - BC) * (p - AC));
         return S;
@@ -99,9 +97,9 @@ public:
 
     double perimeter() const
     {
-        double AB = len(A.first, A.second, B.first, B.second);
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AC = len(C.first, C.second, A.first, A.second);
+        double AB = len(A, B);
+        double BC = len(B, C);
+        double AC = len(C, A);
         double P = AB+BC+AC;
         return P;
     }
@@ -123,9 +121,9 @@ public:
 
     bool isIsosceles() const
     {
-        double AB = len(A.first, A.second, B.first, B.second);
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AC = len(C.first, C.second, A.first, A.second);
+        double AB = len(A, B);
+        double BC = len(B, C);
+        double AC = len(C, A);
         if((AB == BC) || (BC == AC) || (AB == AC))
         {
             return true;
@@ -137,9 +135,9 @@ public:
 
     bool isEquilateral() const
     {
-        double AB = len(A.first, A.second, B.first, B.second);
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AC = len(C.first, C.second, A.first, A.second);
+        double AB = len(A, B);
+        double BC = len(B, C);
+        double AC = len(C, A);
         if(AB == BC == AC)
         {
             return true;
@@ -159,9 +157,9 @@ public:
 
     std::point bisector() const
     {
-        double AB = len(A.first, A.second, B.first, B.second);
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AC = len(C.first, C.second, A.first, A.second);
+        double AB = len(A, B);
+        double BC = len(B, C);
+        double AC = len(C, A);
         double a0 = (AB * A.first + BC * B.first + AC * C.first) / ( AB + BC + AC);
         double b0 = (AB * A.second + BC * B.second + AC * C.second) / (AB + BC + AC);
         std::point L = std::make_pair(a0, b0);
@@ -229,7 +227,14 @@ private:
     std::point B;
     std::point C;
     std::point D;
+    double AB = len(A, B);
+    double BC = len(B, C);
+    double CD = len(C, D);
+    double DA = len(D, A);
+    double AC = len(A, C);
+    double BD = len(B, D);
 public:
+
     quadrangle(double a1, double b1, double a2, double b2, double a3, double b3, double a4, double b4)
     {
         A.first=a1;
@@ -244,10 +249,6 @@ public:
 
     double perimeter() const
     {
-        double AB = (A.first, A.second, B.first, B.second);
-        double BC = (B.first, B.second, C.first, C.second);
-        double CD = (C.first, C.second, D.first, D.second);
-        double DA = (D.first, D.second, A.first, A.second);
         double perimeter = AB + BC + CD + DA;
         return perimeter;
     }
@@ -257,11 +258,8 @@ public:
     double area() const
     {
         std::point O = lineIntersection(A, B, C, D);
-        double DO = len(D.first, D.second, O.first, O.second);
-        double OC = len(O.first, O.second, C.first, C.second);
-        double CD = len(C.first, C.second, D.first, D.second);
-        double AC = len(A.first, A.second, C.first, C.second);
-        double BD = len(B.first, B.second, D.first, D.second);
+        double DO = len(D, O);
+        double OC = len(O, C);
         double cosY = (pow(DO,2) + pow(OC,2) - pow(CD,2)) / (2 * DO * OC);
         double sinY = sqrt(1 - pow(cosY,2));
         double area = 0.5 * AC * BD * sinY;
@@ -270,12 +268,8 @@ public:
 
     double areaTrapeze() const
     {
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AD = len(A.first, A.second, D.first, D.second);
-        double AB = len(A.first, A.second, B.first, B.second);
-        double CD = len(C.first, C.second, D.first, D.second);
-        double MN = (BC + AD)/2;
-        double AF = AD - BC;
+        double MN = (BC + DA)/2;
+        double AF = DA - BC;
         double BF = CD;
         double p = (AB + BF + AF) / 2;
         double BH = (2 * sqrt(p * (p - AB) * (p - BF) * (p - AF))) / AF;
@@ -285,34 +279,25 @@ public:
 
     double areaForRectangular() const
     {
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AB = len(A.first, A.second, B.first, B.second);
         double area = AB * BC;
         return area;
     }
 
     double areaForRhombus() const
     {
-        double AC = len(A.first, A.second, C.first, C.second);
-        double BD = len(B.first, B.second, D.first, D.second);
         double area = 0.5 * AC * BD;
         return area;
     }
 
     double areaForSquare() const
     {
-        double AB = (A.first, A.second, B.first, B.second);
         double area = pow(AB, 2);
         return area;
     }
 
     bool isParallelogram() const
     {
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AD = len(A.first, A.second, D.first, D.second);
-        double AB = len(A.first, A.second, B.first, B.second);
-        double CD = len(C.first, C.second, D.first, D.second);
-        if((AB == CD) && (BC == AD))
+        if((AB == CD) && (BC == DA))
         {
             return true;
         }
@@ -322,8 +307,6 @@ public:
 
     bool isRhombus() const
     {
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AB = len(A.first, A.second, B.first, B.second);
         if (isParallelogram() && AB == BC)
         {
             return true;
@@ -334,8 +317,6 @@ public:
 
     bool isRectangular() const
     {
-        double AC = len(A.first, A.second, C.first, C.second);
-        double BD = len(B.first, B.second, D.first, D.second);
         if(isParallelogram() && AC == BD)
         {
             return true;
@@ -346,8 +327,6 @@ public:
 
     bool isSquare() const
     {
-        double BC = len(B.first, B.second, C.first, C.second);
-        double AB = len(A.first, A.second, B.first, B.second);
         if(isRectangular() && AB == BC)
         {
             return true;
@@ -367,10 +346,9 @@ public:
             return false;
     }
 
+    
     bool isEqualTrapeze() const
     {
-        double AB = len(A.first, A.second, B.first, B.second);
-        double CD = len(C.first, C.second, D.first, D.second);
         if(isTrapeze() && AB==CD)
         {
             return true;
@@ -379,17 +357,11 @@ public:
             return false;
     }
 
-
-
-
-    //*********
-
     void checkFigure() const
     {
         if(isParallelogram())
         {
             std::cout<<"This quadrangle is a parallelogram ";
-            std::cout<<"\nperimeter = "<<perimeter();
             std::cout<<"\narea = "<<area();
             std::cout<<"coordinate of intersection of diagonals - ";
             displayPoint(M);
@@ -397,7 +369,6 @@ public:
         else if(isRhombus())
         {
             std::cout<<"This quadrangle is a rhombus ";
-            std::cout<<"\nperimeter = "<<perimeter();
             std::cout<<"\narea = "<<areaForRhombus();
             std::cout<<"coordinate of intersection of diagonals - ";
             displayPoint(M);
@@ -405,7 +376,6 @@ public:
         else if(isRectangular())
         {
             std::cout<<"This quadrangle is a rectangular ";
-            std::cout<<"\nperimeter = "<<perimeter();
             std::cout<<"\narea = "<<areaForRectangular();
             std::cout<<"coordinate of intersection of diagonals and the center of circumcircle  - ";
             displayPoint(M);
@@ -413,7 +383,6 @@ public:
         else if(isSquare())
         {
             std::cout<<"This quadrangle is a square ";
-            std::cout<<"\nperimeter = "<<perimeter();
             std::cout<<"\narea = "<<areaForSquare();
             std::cout<<"coordinate of intersection of diagonals and the center of circumcircle - ";
             displayPoint(M);
@@ -427,7 +396,6 @@ public:
             else
                 std::cout<<"This quadrangle is a trapeze ";
 
-            std::cout<<"\nperimeter = "<<perimeter();
             std::cout<<"\narea = "<<areaTrapeze();
             std::cout<<"coordinate of intersection of diagonals - ";
             displayPoint(M);
@@ -435,21 +403,179 @@ public:
         else
             {
             std::cout << "This is a simple quadrangle";
-            std::cout << "\nperimeter = " << perimeter();
             std::cout << "\narea = " << area();
             std::cout<<"coordinate of intersection of diagonals - ";
             displayPoint(M);
         }
+        std::cout << "\nperimeter = " << perimeter();
+
     }
 };
 
+class polygon
+{
+public:
+    std::vector<std::point> Vector;
+};
 
-//**********************************************************************
+std::vector<std::point> createPolygon(int n)
+{
+    polygon a;
+    a.Vector.resize(n);
+    std::cout<<a.Vector.size();
+    for (int i=0; i<n; i++)
+    {
+        double x, y;
+        std::cin>>x>>y;
+        std::point A;
+        A.first=x;
+        A.second=y;
+        a.Vector[i]=A;
+    }
 
+    /*for(int i=0; i<n; i++)
+    {
+        displayPoint(a.Vector[i]);
+    }*/
+    return a.Vector;
+}
+
+
+
+
+double perimeter (std::vector<std::point> &v, int n)
+{
+    double P = 0;
+    int i = 0;
+    while(n!=0)
+    {
+        P += len(v[i], v[i+1]);
+        i++;
+        n--;
+    }
+    return P;
+}
+
+
+
+/*double areaForRightPolygon(std::vector<std::point> &v, int n)
+{
+    std::point M;
+    M.first = (v[0].first + v[0].first) / 2;
+    M.second = (v[1].second + v[1].second) / 2;
+    std::point O;
+    O = lineIntersection(v[0], v[4], v[2], v[4]);
+
+}*/
+
+double area (std::vector<std::point> &v, int n)
+{
+    double S = 0.0;
+    int j = n - 1;
+    for(int i = 0; i < n; i++)
+    {
+        S += (v[j].first + v[i].first) * (v[j].second - v[i].second);
+        j = i;
+    }
+    return abs(S / 2.0);
+}
+
+
+bool isRightPolygon(std::vector<std::point> &v, int n)
+{
+    double a,b;
+    int x = 0;
+    int i = 0;
+    double P = perimeter(v, n);
+    double Len = P/n;
+    while(n!=0)
+    {
+        a = len(v[i], v[i+1]);
+        i++;
+        n--;
+        if (a==Len)
+        {
+            x++;
+        }
+    }
+    if (x==n)
+        return true;
+    else
+        return false;
+
+}
+
+bool isConvex(std::vector<std::point> &v, int n)
+{
+    double zcrossproduct = 0;
+    for (int i = 1; i<n+1; i++)
+    {
+        double dx1 = v[i].first - v[i-1].first;
+        double dy1 = v[i].second - v[i-1].second;
+        double dx2 = v[i+1].first - v[i].first;
+        double dy2 = v[i+1].second - v[i].second;
+        zcrossproduct += (dx1 * dy2 - dy1 * dx2);
+        std::cout<<zcrossproduct<<"\n";
+    }
+    std::cout<<zcrossproduct<<"\n";
+
+    if ((zcrossproduct > 0) || (zcrossproduct < 0))
+    {
+        return true;
+    }
+    else
+        return false;
+}
+
+void polygon(int n)
+{
+    std::vector<std::point> VECTOR;
+    VECTOR=createPolygon(n);
+    if(isConvex(VECTOR, n))
+    {
+        std::cout<<"This polygon is convex \n";
+    }
+    else
+    {
+        std::cout<<"This polygon isn't non convex \n";
+    }
+    std::cout<<"perimeter - "<<perimeter(VECTOR, n);
+    std::cout<<"\narea - "<<area(VECTOR, n);
+}
+
+//*************************************************************************************
 
 int main() {
-    quadrangle a(3, 4, 1, 5, 7, 8, 9, 6);
-    a.checkFigure();
+    //quadrangle a(3, 4, 1, 5, 7, 8, 9, 6);
+    //a.checkFigure();
+
+    /*int n;
+    std::cin>>n;
+    polygon a;
+    a.Vector.resize(n);
+    std::cout<<a.Vector.size();
+    for (int i=0; i<n; i++)
+    {
+        double x, y;
+        std::cin>>x>>y;
+        std::point A;
+        A.first=x;
+        A.second=y;
+        a.Vector[i]=A;
+    }
+
+    for(int i=0; i<n; i++)
+    {
+        displayPoint(a.Vector[i]);
+    }*/
+    int  n;
+    std::cin>>n;
+    /*std::vector<std::point> VECTOR;
+    VECTOR=createPolygon(n);*/
+    //std::cout<<perimeter(VECTOR, n)<<"\n"<<area(VECTOR, n);
+    polygon(n);
+
+
 
     //triangular b(1, 4, -6, 3, 7, 9);
     //b.checkTriangular();
