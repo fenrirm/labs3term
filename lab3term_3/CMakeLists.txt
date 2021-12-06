@@ -9,7 +9,7 @@ set(SDL2_LIB_DIR D:/libr/SDL/lib/x86)
 include_directories(${SDL2_INCLUDE_DIR})
 link_directories(${SDL2_LIB_DIR})
 
-set (SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp)
 add_executable(lab3term_3 main.cpp)
 
 target_link_libraries(${PROJECT_NAME} SDL2main SDL2)
