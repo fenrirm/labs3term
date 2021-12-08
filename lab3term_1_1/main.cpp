@@ -256,6 +256,10 @@ public:
             len++;
         }
     }
+
+
+
+
     void add(sparse_matrix b)
     {
         //if matrices don't have same dimensions
@@ -537,6 +541,16 @@ int main() {
     }
     std::cout<<"***********VECTOR REPRESENTATION************"<<std::endl;
     sparesify(M);*/
+
+    sparse_matrix a(4, 4);
+    a.insert(1, 2, 10);
+    a.insert(1, 4, 12);
+    a.insert(3, 3, 5);
+    a.insert(4, 1, 15);
+    a.insert(4, 2, 12);
+    a.print();
+
+
 
 
     //MEMORY FREE
