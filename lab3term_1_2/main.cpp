@@ -66,16 +66,22 @@ static double len( std::point K, std::point H)
     return length;
 }
 
+class Figure // abstract class
+{
+public:
+    virtual double getSquare() = 0;
+    virtual double getPerimeter() = 0;
+    virtual double showFigureType() = 0;
+};
 
-class triangular
+class triangular: Figure
 {
 private:
    std::point A;
    std::point B;
    std::point C;
 public:
-
-    triangular(double a1, double b1, double a2, double b2, double a3, double b3)
+    triangular(double a1, double b1, double a2, double b2, double a3, double b3)// constructor
     {
         A.first=a1;
         A.second=b1;
@@ -85,7 +91,7 @@ public:
         C.second=b3;
     }
 
-    double area() const
+    double getSquare() const
     {
         double AB = len(A, B);
         double BC = len(B, C);
@@ -95,7 +101,7 @@ public:
         return S;
     }
 
-    double perimeter() const
+    double getPerimeter() const
     {
         double AB = len(A, B);
         double BC = len(B, C);
@@ -187,7 +193,7 @@ public:
     }
 
 
-    void checkTriangular() const
+    void showFigureType() const
     {
         if(isIsosceles())
         {
@@ -205,8 +211,8 @@ public:
         {
             std::cout<<"This is a simple triangular";
         }
-        std::cout<<"perimeter = "<<perimeter()<<"\n"
-        <<"area = "<<area()<<"\n";
+        std::cout<<"perimeter = "<<getPerimeter()<<"\n"
+        <<"area = "<<getSquare()<<"\n";
         std::cout<<"The coordinate of the point of intersection of medians - ";
         displayPoint(median());
         std::cout<<"\nThe coordinate of the point of intersection of bisectors - ";
