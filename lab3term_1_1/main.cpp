@@ -5,7 +5,7 @@
 #define N 50
 
 
-typedef std::vector<int> vi;\
+typedef std::vector<int> vi;
 typedef std::vector<std::vector<int> > matrix;
 
 void printMatrix(const matrix& M)

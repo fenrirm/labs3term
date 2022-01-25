@@ -3,7 +3,17 @@
 #include <bits/stdc++.h>
 #define point pair<double, double>
 #include <vector>
+#include "functions.h"
+#include "Triangular.h"
+#include "Quadrangle.h"
+#include "Figure.h"
+#include "Polygon.h"
 
+/*#include "functions.h"
+#include "Figure.h"
+#include "Triangular.h"*/
+//***********************************************************************************
+/*
 void displayPoint(std::point P)
 {
     std::cout<<"("<<P.first<<","<<P.second<<")"<<std::endl;
@@ -65,23 +75,26 @@ static double len( std::point K, std::point H)
     double length = sqrt(pow((H.first-K.first),2)+pow((H.second-K.second),2));
     return length;
 }
-
+*/
+//*********************************************************************************
+/*
 class Figure // abstract class
 {
 public:
     virtual double getSquare() = 0;
     virtual double getPerimeter() = 0;
-    virtual double showFigureType() = 0;
+    virtual void showFigureType() = 0;
 };
-
-class triangular: Figure
+*/
+//************************************************************************************
+/*class Triangular: public Figure
 {
 private:
    std::point A;
    std::point B;
    std::point C;
 public:
-    triangular(double a1, double b1, double a2, double b2, double a3, double b3)// constructor
+    Triangular(double a1, double b1, double a2, double b2, double a3, double b3)// constructor
     {
         A.first=a1;
         A.second=b1;
@@ -91,7 +104,7 @@ public:
         C.second=b3;
     }
 
-    double getSquare() const
+    double getSquare() override
     {
         double AB = len(A, B);
         double BC = len(B, C);
@@ -101,7 +114,7 @@ public:
         return S;
     }
 
-    double getPerimeter() const
+    double getPerimeter() override
     {
         double AB = len(A, B);
         double BC = len(B, C);
@@ -193,7 +206,7 @@ public:
     }
 
 
-    void showFigureType() const
+    void showFigureType() override
     {
         if(isIsosceles())
         {
@@ -223,10 +236,11 @@ public:
 
 
 
-};
+};*/
 //*************************************************************************************
 
-class quadrangle
+/*
+class Quadrangle: public Figure
 {
 private:
     std::point A;
@@ -240,8 +254,7 @@ private:
     double AC = len(A, C);
     double BD = len(B, D);
 public:
-
-    quadrangle(double a1, double b1, double a2, double b2, double a3, double b3, double a4, double b4)
+    Quadrangle(double a1, double b1, double a2, double b2, double a3, double b3, double a4, double b4)
     {
         A.first=a1;
         A.second=b1;
@@ -253,7 +266,7 @@ public:
         D.second=b4;
     }
 
-    double perimeter() const
+    double getPerimeter() const
     {
         double perimeter = AB + BC + CD + DA;
         return perimeter;
@@ -413,22 +426,145 @@ public:
             std::cout<<"coordinate of intersection of diagonals - ";
             displayPoint(M);
         }
-        std::cout << "\nperimeter = " << perimeter();
+        std::cout << "\nperimeter = " << getPerimeter();
 
     }
 };
+*/
 
-class polygon
+
+
+/*class Polygon:Figure
 {
-public:
+private:
     std::vector<std::point> Vector;
-};
+public:
+    static double getSquare(std::vector<std::point> &v, int n)
+    {
+        double S = 0.0;
+        int j = n - 1;
+        for(int i = 0; i < n; i++)
+        {
+            S += (v[j].first + v[i].first) * (v[j].second - v[i].second);
+            j = i;
+        }
+        return abs(S / 2.0);
+    }
 
-std::vector<std::point> createPolygon(int n)
+    static double getPerimeter(std::vector<std::point> &v, int n)
+    {
+        double P = 0;
+        int i = 0;
+        while(n!=0)
+        {
+            P += len(v[i], v[i+1]);
+            i++;
+            n--;
+        }
+        return P;
+    }
+
+    static bool isRightPolygon(std::vector<std::point> &v, int n)
+    {
+        double a,b;
+        int x = 0;
+        int i = 0;
+        double P = getPerimeter(v, n);
+        double Len = P/n;
+        while(n!=0)
+        {
+            a = len(v[i], v[i+1]);
+            i++;
+            n--;
+            if (a==Len)
+            {
+                x++;
+            }
+        }
+        if (x==n)
+            return true;
+        else
+            return false;
+
+    }
+
+    static bool isConvex(std::vector<std::point> &v, int n)
+    {
+        double zCrossProduct = 0;
+        for (int i = 1; i<n+1; i++)
+        {
+            double dx1 = v[i].first - v[i-1].first;
+            double dy1 = v[i].second - v[i-1].second;
+            double dx2 = v[i+1].first - v[i].first;
+            double dy2 = v[i+1].second - v[i].second;
+            zCrossProduct += (dx1 * dy2 - dy1 * dx2);
+            std::cout<<zCrossProduct<<"\n";
+        }
+        std::cout<<zCrossProduct<<"\n";
+
+        if ((zCrossProduct > 0) || (zCrossProduct < 0))
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    static void showFigureType(int n)
+    {
+        std::vector<std::point> VECTOR;
+        //VECTOR=createPolygon(n);
+
+        if(isConvex(VECTOR, n))
+        {
+            std::cout<<"This polygon is convex \n";
+        }
+        else
+        {
+            std::cout<<"This polygon isn't non convex \n";
+        }
+        std::cout<<"perimeter - "<<getPerimeter(VECTOR, n);
+        std::cout<<"\narea - "<<getSquare(VECTOR, n);
+    }
+
+    std::vector<std::point> static createPolygon(int n, std::vector<std::point> VECTOR)
+    {
+        *//*Polygon a;
+        a.Vector.resize(n);
+        std::cout<<a.Vector.size();*//*
+        VECTOR.resize(n);
+        std::cout<<VECTOR.size();
+        for (int i=0; i<n; i++)
+        {
+            double x, y;
+            std::cin>>x>>y;
+            std::point A;
+            A.first=x;
+            A.second=y;
+            //a.Vector[i]=A;
+            VECTOR[i]=A;
+        }
+
+        *//*for(int i=0; i<n; i++)
+        {
+            displayPoint(a.Vector[i]);
+        }*//*
+        //return a.Vector;
+        return VECTOR;
+    }
+
+
+
+};*/
+
+
+/*std::vector<std::point> createPolygon(int n, std::vector<std::point> VECTOR)
 {
-    polygon a;
+    *//*Polygon a;
     a.Vector.resize(n);
-    std::cout<<a.Vector.size();
+    std::cout<<a.Vector.size();*//*
+    VECTOR.resize(n);
+    std::cout<<VECTOR.size();
     for (int i=0; i<n; i++)
     {
         double x, y;
@@ -436,124 +572,24 @@ std::vector<std::point> createPolygon(int n)
         std::point A;
         A.first=x;
         A.second=y;
-        a.Vector[i]=A;
+        //a.Vector[i]=A;
+        VECTOR[i]=A;
     }
 
-    /*for(int i=0; i<n; i++)
+    *//*for(int i=0; i<n; i++)
     {
         displayPoint(a.Vector[i]);
-    }*/
-    return a.Vector;
-}
-
-
-
-
-double perimeter (std::vector<std::point> &v, int n)
-{
-    double P = 0;
-    int i = 0;
-    while(n!=0)
-    {
-        P += len(v[i], v[i+1]);
-        i++;
-        n--;
-    }
-    return P;
-}
-
-
-
-/*double areaForRightPolygon(std::vector<std::point> &v, int n)
-{
-    std::point M;
-    M.first = (v[0].first + v[0].first) / 2;
-    M.second = (v[1].second + v[1].second) / 2;
-    std::point O;
-    O = lineIntersection(v[0], v[4], v[2], v[4]);
-
+    }*//*
+    //return a.Vector;
+    return VECTOR;
 }*/
 
-double area (std::vector<std::point> &v, int n)
-{
-    double S = 0.0;
-    int j = n - 1;
-    for(int i = 0; i < n; i++)
-    {
-        S += (v[j].first + v[i].first) * (v[j].second - v[i].second);
-        j = i;
-    }
-    return abs(S / 2.0);
-}
 
-
-bool isRightPolygon(std::vector<std::point> &v, int n)
-{
-    double a,b;
-    int x = 0;
-    int i = 0;
-    double P = perimeter(v, n);
-    double Len = P/n;
-    while(n!=0)
-    {
-        a = len(v[i], v[i+1]);
-        i++;
-        n--;
-        if (a==Len)
-        {
-            x++;
-        }
-    }
-    if (x==n)
-        return true;
-    else
-        return false;
-
-}
-
-bool isConvex(std::vector<std::point> &v, int n)
-{
-    double zcrossproduct = 0;
-    for (int i = 1; i<n+1; i++)
-    {
-        double dx1 = v[i].first - v[i-1].first;
-        double dy1 = v[i].second - v[i-1].second;
-        double dx2 = v[i+1].first - v[i].first;
-        double dy2 = v[i+1].second - v[i].second;
-        zcrossproduct += (dx1 * dy2 - dy1 * dx2);
-        std::cout<<zcrossproduct<<"\n";
-    }
-    std::cout<<zcrossproduct<<"\n";
-
-    if ((zcrossproduct > 0) || (zcrossproduct < 0))
-    {
-        return true;
-    }
-    else
-        return false;
-}
-
-void polygon(int n)
-{
-    std::vector<std::point> VECTOR;
-    VECTOR=createPolygon(n);
-    if(isConvex(VECTOR, n))
-    {
-        std::cout<<"This polygon is convex \n";
-    }
-    else
-    {
-        std::cout<<"This polygon isn't non convex \n";
-    }
-    std::cout<<"perimeter - "<<perimeter(VECTOR, n);
-    std::cout<<"\narea - "<<area(VECTOR, n);
-}
 
 //*************************************************************************************
 
+
 int main() {
-    //quadrangle a(3, 4, 1, 5, 7, 8, 9, 6);
-    //a.checkFigure();
 
     /*int n;
     std::cin>>n;
@@ -574,17 +610,20 @@ int main() {
     {
         displayPoint(a.Vector[i]);
     }*/
-    int  n;
-    std::cin>>n;
+    /*int  k;
+    std::cin>>k;*/
     /*std::vector<std::point> VECTOR;
     VECTOR=createPolygon(n);*/
     //std::cout<<perimeter(VECTOR, n)<<"\n"<<area(VECTOR, n);
-    polygon(n);
+    //Polygon(k);
+    //Triangular a(1, 4, -6, 3, 7, 9);
+    Triangular triangular(1, 2, 3, 8, 7, 1);
+    Quadrangle quadrangle(1, 2, 3, 8, 5, 5, 7, 1);
+    quadrangle.showFigureType();
+    std::cout<<quadrangle.getSquare();
 
 
 
-    //triangular b(1, 4, -6, 3, 7, 9);
-    //b.checkTriangular();
 
 
 
